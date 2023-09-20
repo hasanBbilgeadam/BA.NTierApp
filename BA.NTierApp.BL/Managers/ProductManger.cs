@@ -11,23 +11,22 @@ using System.Threading.Tasks;
 
 namespace BA.NTierApp.BL.Managers
 {
-    public class ProductManger : IProductService
+    public class ProductManger : BaseManager<Product>,IProductService
     {
-
         GenericRepository<Product> repository;
-        public ProductManger()
+
+
+        public ProductManger(GenericRepository<Product> _repository):base(_repository)
         {
-            repository = new(new AppDbContext());
+            repository = _repository;
         }
         public bool CreateProduct(Product product)
         {
             //validation
             //if
 
-
             repository.Add(product);
             return true;
-
             
         }
 
@@ -38,9 +37,7 @@ namespace BA.NTierApp.BL.Managers
                 :repository.GetAll();
         }
 
-        public Product? GetProductByID(int id)
-             => repository.Get(id);
-
+     
         public bool SellProduct(Product product)
         {
             var data = repository.Get(product.Id);
