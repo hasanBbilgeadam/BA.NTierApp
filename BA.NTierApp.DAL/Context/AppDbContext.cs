@@ -15,6 +15,8 @@ namespace BA.NTierApp.DAL.Context
 
         public DbSet<Product> Products { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<UserProductRecord> UserProductRecords { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             //hardcode
@@ -29,19 +31,35 @@ namespace BA.NTierApp.DAL.Context
 
             modelBuilder.Entity<Product>()
                  .HasKey(x => x.Id);
-
-
-
             modelBuilder.Entity<Product>()
                 .Property(x => x.Price)
                 .HasPrecision(6, 2);
-
             modelBuilder.Entity<Product>()
                 .Property(x => x.Description)
                 .HasMaxLength(200)
                 .IsRequired();
 
-                
+
+            //product - category realation
+            modelBuilder.Entity<Category>().HasKey(x => x.Id);
+            modelBuilder.Entity<Category>()
+                .HasMany(x => x.Products)
+                .WithOne(x => x.Category)
+                .HasForeignKey(x => x.CategoryId);
+
+            //product -recod
+
+            modelBuilder.Entity<Product>().HasMany(x=>x.UserRecord).WithOne(x=>x.Product).HasForeignKey(x=>x.ProductId);
+
+            //product - user relation
+            modelBuilder.Entity<User>().HasMany(x => x.ProductRecords).WithOne(x => x.user).HasForeignKey(x => x.UserID);
+
+
+            //product record key
+            modelBuilder.Entity<UserProductRecord>().HasKey(x => x.Id);
+
+            modelBuilder.Entity<User>().HasKey(x => x.Id);
+           
 
         }
 

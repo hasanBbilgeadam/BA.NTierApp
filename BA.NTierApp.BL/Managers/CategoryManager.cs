@@ -12,10 +12,10 @@ namespace BA.NTierApp.BL.Managers
 {
     public class CategoryManager:BaseManager<Category>,ICategoryService
     {
-        GenericRepository<Category> repository;
-        public CategoryManager(GenericRepository<Category> _repository) : base(_repository)
+
+        public CategoryManager(GenericRepository<Category> repository) : base(repository)
         {
-            repository = _repository;
+            _repository = repository;
         }
 
         

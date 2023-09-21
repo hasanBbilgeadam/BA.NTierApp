@@ -13,7 +13,7 @@ namespace BA.NTierApp.BL.Managers
 {
     public  abstract class BaseManager<T> : IService<T> where T : class, IEntity
     {
-        GenericRepository<T> _repository;
+        protected GenericRepository<T> _repository;
         public BaseManager(GenericRepository<T> repository)
         {
             _repository = repository;

@@ -16,24 +16,19 @@ namespace BA.NTierApp.UI
         static void Main(string[] args)
         {
             //DI 
-            IProductService productService = new ProductManger( new GenericRepository<Product>(new AppDbContext()));
+            IProductService productService = new ProductManger( new GenericRepository<Product>(new AppDbContext()),new GenericRepository<User>(new AppDbContext()));
 
 
-            ICategoryService categoryService = new CategoryManager(new GenericRepository<Category>(new AppDbContext()));
+            //productService.LendTheProduct(1, 1);
 
+            var result =  productService.WhoIsOwner(1);
 
-            categoryService.Add(new()
-            {
-                CategoryName = "yeni category"
-            });
-
-            
+            Console.WriteLine(result);
 
 
 
 
-            
-        
+
         }
     }
 }

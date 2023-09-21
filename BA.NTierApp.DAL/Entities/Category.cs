@@ -11,6 +11,8 @@ namespace BA.NTierApp.DAL.Entities
     {
         public int Id { get; set; }
 
-        public string CategoryName { get; set; } 
+        public string CategoryName { get; set; }
+
+        public List<Product> Products { get; set; }
     }
 }

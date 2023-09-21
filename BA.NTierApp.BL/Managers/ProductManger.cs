@@ -2,6 +2,7 @@
 using BA.NTierApp.DAL.Context;
 using BA.NTierApp.DAL.Entities;
 using BA.NTierApp.DAL.Repository;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
 using System;
 using System.Collections.Generic;
@@ -13,34 +14,68 @@ namespace BA.NTierApp.BL.Managers
 {
     public class ProductManger : BaseManager<Product>,IProductService
     {
-        GenericRepository<Product> repository;
-
-
-        public ProductManger(GenericRepository<Product> _repository):base(_repository)
+        GenericRepository<User> _userRepository;
+        GenericRepository<UserProductRecord> _userProductRepo;
+        public ProductManger(GenericRepository<Product> repository, GenericRepository<User> userRepo ):base(repository)
         {
-            repository = _repository;
+            _repository = repository;
+            _userRepository = userRepo;
+           
         }
         public bool CreateProduct(Product product)
         {
             //validation
             //if
 
-            repository.Add(product);
+            _repository.Add(product);
             return true;
             
         }
-
         public List<Product> GetAllProduct(bool isExist = true)
         {
-                return isExist ? 
-                repository.GetQueryable().Where(x => x.Stock > 0).ToList() 
-                :repository.GetAll();
+                return isExist ?
+                _repository.GetQueryable().Where(x => x.Stock > 0).ToList() 
+                : _repository.GetAll();
         }
 
-     
+        public bool LendTheProduct(int product, int user)
+        {
+            //ürünün statusu free mi ?
+
+            var data = _repository.Get(product);
+
+            if (data != null)
+            {
+                if (data.Status == Status.free)
+                {
+                     var userdata = _userRepository.Get(user);
+                    if (userdata == null)
+                    {
+                        return false;
+                    }
+                    data.UserRecord.Add(new UserProductRecord()
+                    {
+                        user = userdata,
+                        TakenDate = DateTime.Now,
+
+                    });
+                    data.Status = Status.outside;
+
+
+                    _repository.UpdateV2(data);
+                    return true;    
+
+                }
+
+            }
+
+
+            return false;
+        }
+
         public bool SellProduct(Product product)
         {
-            var data = repository.Get(product.Id);
+            var data = _repository.Get(product.Id);
 
             if (data.Stock <= 0)
             {
@@ -48,8 +83,26 @@ namespace BA.NTierApp.BL.Managers
             }
 
             --data.Stock;
-            repository.UpdateV2(data);
+            _repository.UpdateV2(data);
             return true;    
+        }
+
+
+        public string WhoIsOwner(int id)
+        {
+
+
+            var ürün =  _repository.GetQueryable().Include(x=>x.UserRecord).ThenInclude(x=>x.user).Where(x=>x.Id == id).First();
+
+            if (ürün == null)
+                return "ürün bulunamadı ";
+            if (ürün.Status == Status.free)
+                return "ürünün sahibi yok";
+            var up = ürün.UserRecord.Where(x => x.ReturnDate == null).First();
+                        return up.user.UserName + " "+ up.TakenDate.ToString();
+            
+
+
         }
     }
 }

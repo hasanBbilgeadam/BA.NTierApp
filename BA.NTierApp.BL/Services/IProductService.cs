@@ -9,20 +9,13 @@ namespace BA.NTierApp.BL.Services
 {
     public interface IProductService:IService<Product>
     {
-
-        //product oluştururken
-        //kendi içimde bir validasyon yapcam
-
         bool CreateProduct(Product product);
-
-        //stok'daki seviye 0'altındaysa satma
-
         bool SellProduct(Product product);
-
-        //
-     
         List<Product> GetAllProduct(bool isExist = true);
 
+        bool LendTheProduct(int product, int user);
+
+        string WhoIsOwner(int id);
 
     }
 }
