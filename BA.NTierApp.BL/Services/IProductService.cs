@@ -17,5 +17,8 @@ namespace BA.NTierApp.BL.Services
 
         string WhoIsOwner(int id);
 
+        void ListToProductWithOwners();
+        void ProductReturn(int id);
+
     }
 }

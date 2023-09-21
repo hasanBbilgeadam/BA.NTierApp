@@ -18,14 +18,13 @@ namespace BA.NTierApp.UI
             //DI 
             IProductService productService = new ProductManger( new GenericRepository<Product>(new AppDbContext()),new GenericRepository<User>(new AppDbContext()));
 
-
-            //productService.LendTheProduct(1, 1);
-
-            var result =  productService.WhoIsOwner(1);
-
-            Console.WriteLine(result);
+            //productService.ListToProductWithOwners();
 
 
+            Console.WriteLine(productService.WhoIsOwner(2));
+                        productService.ProductReturn(2);
+                       
+            Console.Write( productService.WhoIsOwner(2));
 
 
 
