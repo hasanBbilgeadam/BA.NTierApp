@@ -1,6 +1,8 @@
 ﻿using BA.NTierApp.BL.Managers;
 using BA.NTierApp.BL.Services;
+using BA.NTierApp.DAL.Context;
 using BA.NTierApp.DAL.Entities;
+using BA.NTierApp.DAL.Repository;
 using System.Globalization;
 
 namespace BA.NTierApp.UI
@@ -9,22 +11,12 @@ namespace BA.NTierApp.UI
     {
         static void Main(string[] args)
         {
-            //DI 
-            IProductService productService = new ProductManger();
 
+            IProductService productService = new ProductManger(new GenericRepository<Product>(new AppDbContext()));
 
+            productService.CustomProductSeriveMethod();
+            productService.Delete(new());
 
-
-            var data = productService.GetProductByID(1);
-
-
-            var result = productService.SellProduct(data);
-
-            if (result)
-            {
-                Console.WriteLine("işlem başarılı");
-            }
-            else { Console.WriteLine("işlem başarısız"); }
         }
     }
 }

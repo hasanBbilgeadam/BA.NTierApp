@@ -7,24 +7,11 @@ using System.Threading.Tasks;
 
 namespace BA.NTierApp.BL.Services
 {
-    public interface IProductService
+    public interface IProductService:IGenericService<Product>
     {
 
-        //product oluştururken
-        //kendi içimde bir validasyon yapcam
 
-        bool CreateProduct(Product product);
-
-        //stok'daki seviye 0'altındaysa satma
-
-        bool SellProduct(Product product);
-
-        //
-     
-        List<Product> GetAllProduct(bool isExist = true);
-
-        Product? GetProductByID(int id);
-            
+         void CustomProductSeriveMethod();
 
     }
 }
